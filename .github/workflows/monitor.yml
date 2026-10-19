@@ -1,15 +1,25 @@
-name: Production Monitor 
-on: 
-schedule: - cron: '0 * * * *' # Chạy mỗi 1 giờ 
-workflow_dispatch: # Cho phép bấm chạy bằng tay trên giao diện
-jobs: 
-monitor-api: 
-runs-on: ubuntu-latest 
-steps: - uses: actions/checkout@v4 - name: Cài đặt Postman CLI
-run: | 
-curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh 
-71ITSE41203 - name: Đăng nhập Postman 
-run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }} - name: Chạy kịch bản Monitor trực tiếp từ Cloud 
-# Thay ID của Collection Monitor và ID của Environment vào đây 
-run: | 
-postman collection run "50096386-ebeaeaa7-fc75-4dcb-94fb-25b40f829b7d" 
+
+name: Production Monitor
+
+on:
+  schedule:
+    - cron: '0 * * * *' # Chạy mỗi giờ, vào phút thứ 0
+  workflow_dispatch: # Cho phép chạy thủ công
+
+jobs:
+  monitor-api:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cài đặt Postman CLI
+        run: |
+          curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+
+      - name: Đăng nhập Postman
+        run: postman login --with-api-key "${{ secrets.POSTMAN_API_KEY }}"
+
+      - name: Chạy kịch bản Monitor từ Cloud
+        run: |
+          postman collection run "50096386-ebeaeaa7-fc75-4dcb-94fb-25b40f829b7d"
